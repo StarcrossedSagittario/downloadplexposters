@@ -1,11 +1,12 @@
 # download plex posters
-python script that helps you automatically download plex movie posters. (tested on python 3.8 so should work on anything basically)
+python script that helps you automatically download / fetch plex movie posters. (tested on python 3.8 so should work on anything basically).
 alternative to <a href = "https://github.com/2miles/plex-poster-downloader"> 2miles' plex poster downloader</a> to make it super convenient for people who don't want to deal with too much troubleshooting.
 
 How to run:
 1. open command prompt (Win+R and typing cmd)
-2. drag the python script file onto the command prompt (be sure to configure it with the plex token and library id as stated below first!)
-3. click enter and let the poster files download
+2. run pip install requests (external package required for the script)
+3. drag the python script file onto the command prompt (be sure to configure it with the plex token and library id as stated below first!)
+4. click enter and let the poster files download
 
 remember to keep the '' when pasting in the values eg. PLEX_TOKEN = 'pasted_value' 
 
