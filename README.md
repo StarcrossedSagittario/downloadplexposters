@@ -1,4 +1,4 @@
-# downloadplexposters
+# download plex posters
 python script that helps you automatically download plex movie posters.
 
 To get your plex token:
