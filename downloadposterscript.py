@@ -5,7 +5,7 @@ import time
 import requests
 import xml.etree.ElementTree as ET
 import tempfile
-import hashlib
+import hashlib #check whether file already exists to prevent duplicate posters when rerunning scripts after you add more movies
 from pathlib import Path
 
 # Hard-coded (replace these with your values)
@@ -42,11 +42,11 @@ def get_poster_url(video_tag):
     return f"{PLEX_URL}{poster}?X-Plex-Token={PLEX_TOKEN}"
 
 def existing_poster_hashes(directory: Path):
-    hashes = {}
+    hashes = set()
     for p in directory.glob('poster*.jpg'):
         try:
             with p.open('rb') as f:
-                hashes[p.name] = hashlib.sha256(f.read()).hexdigest()
+                hashes.add(hashlib.sha256(f.read()).hexdigest())
         except Exception:
             continue
     return hashes
@@ -66,11 +66,6 @@ def acquire_lock(directory: Path, timeout=LOCK_ACQUIRE_TIMEOUT):
     while True:
         try:
             os.mkdir(lock_dir)
-            # optionally write PID/time info
-            try:
-                (lock_dir / 'owner').write_text(f"{os.getpid()}\n{time.time()}\n")
-            except Exception:
-                pass
             return lock_dir
         except FileExistsError:
             if time.time() > deadline:
@@ -81,11 +76,6 @@ def acquire_lock(directory: Path, timeout=LOCK_ACQUIRE_TIMEOUT):
 
 def release_lock(lock_dir: Path):
     try:
-        # remove owner file if present
-        try:
-            (lock_dir / 'owner').unlink(missing_ok=True)
-        except Exception:
-            pass
         os.rmdir(lock_dir)
     except Exception:
         pass
@@ -114,7 +104,7 @@ def download_poster_if_new(poster_url, directory: Path):
             os.fsync(tmp.fileno())
 
         new_hash = hasher.hexdigest()
-        if new_hash in existing_hashes.values():
+        if new_hash in existing_hashes:
             tmp_name.unlink(missing_ok=True)
             return False
 
@@ -153,3 +143,4 @@ def main():
 
 if __name__ == '__main__':
     main()
+
