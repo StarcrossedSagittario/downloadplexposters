@@ -1,5 +1,6 @@
 # download plex posters
-python script that helps you automatically download plex movie posters.
+python script that helps you automatically download plex movie posters. (tested on python 3.8 so should work on anything basically)
+alternative to 2miles' plex poster downloader to make it even easier
 
 To get your plex token:
 1. open plex in browser
